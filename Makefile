@@ -1,5 +1,5 @@
 PKG_NAME := libical
-URL = https://github.com/libical/libical/releases/download/v3.0.1/libical-3.0.1.tar.gz
-
+URL = https://github.com/libical/libical/releases/download/v3.0.2/libical-3.0.2.tar.gz
+ARCHIVES = 
 
 include ../common/Makefile.common
