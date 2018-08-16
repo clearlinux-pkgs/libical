@@ -1,2 +1,6 @@
 # This file contains pkgconfig build requirements that get picked up
 # but are undesirable. One entry per line, no whitespace.
+libxml-2.0${_libxml_version_cmp}
+gobject-2.0${_glib_version_cmp}
+glib-2.0${_glib_version_cmp}
+gobject-introspection-1.0${_gir_version_cmp}

@@ -4,3 +4,4 @@ tzdata
 
 libxml2-dev
 glib-dev
+buildreq-gnome

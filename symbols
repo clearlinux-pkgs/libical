@@ -243,6 +243,7 @@ libical-glib.so.3:i_cal_parameter_get_xvalue
 libical-glib.so.3:i_cal_parameter_has_same_name
 libical-glib.so.3:i_cal_parameter_isa
 libical-glib.so.3:i_cal_parameter_isa_parameter
+libical-glib.so.3:i_cal_parameter_kind_is_valid
 libical-glib.so.3:i_cal_parameter_kind_to_string
 libical-glib.so.3:i_cal_parameter_new
 libical-glib.so.3:i_cal_parameter_new_actionparam
@@ -1285,6 +1286,7 @@ libical.so.3:icalparameter_get_xvalue
 libical.so.3:icalparameter_has_same_name
 libical.so.3:icalparameter_isa
 libical.so.3:icalparameter_isa_parameter
+libical.so.3:icalparameter_kind_is_valid
 libical.so.3:icalparameter_kind_to_string
 libical.so.3:icalparameter_new
 libical.so.3:icalparameter_new_actionparam
