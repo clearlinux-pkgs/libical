@@ -4,14 +4,15 @@
 #
 Name     : libical
 Version  : 3.0.4
-Release  : 11
+Release  : 12
 URL      : https://github.com/libical/libical/releases/download/v3.0.4/libical-3.0.4.tar.gz
 Source0  : https://github.com/libical/libical/releases/download/v3.0.4/libical-3.0.4.tar.gz
 Summary  : An implementation of basic iCAL protocols
 Group    : Development/Tools
 License  : BSD-3-Clause LGPL-2.1 MPL-2.0 MPL-2.0-no-copyleft-exception
-Requires: libical-lib
-Requires: libical-license
+Requires: libical-data = %{version}-%{release}
+Requires: libical-lib = %{version}-%{release}
+Requires: libical-license = %{version}-%{release}
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-cpan
 BuildRequires : buildreq-gnome
@@ -21,7 +22,11 @@ BuildRequires : icu4c-dev
 BuildRequires : libxml2-dev
 BuildRequires : perl
 BuildRequires : pkg-config
+BuildRequires : pkgconfig(glib-2.0)
+BuildRequires : pkgconfig(gobject-2.0)
+BuildRequires : pkgconfig(gobject-introspection-1.0)
 BuildRequires : pkgconfig(icu-i18n)
+BuildRequires : pkgconfig(libxml-2.0)
 BuildRequires : tzdata
 
 %description
@@ -33,28 +38,30 @@ can be accessed from PHP. Would be a valuable building
 block in the practical adoption of the iCalendar
 standard (imho).
 
+%package data
+Summary: data components for the libical package.
+Group: Data
+
+%description data
+data components for the libical package.
+
+
 %package dev
 Summary: dev components for the libical package.
 Group: Development
-Requires: libical-lib
-Provides: libical-devel
+Requires: libical-lib = %{version}-%{release}
+Requires: libical-data = %{version}-%{release}
+Provides: libical-devel = %{version}-%{release}
 
 %description dev
 dev components for the libical package.
 
 
-%package doc
-Summary: doc components for the libical package.
-Group: Documentation
-
-%description doc
-doc components for the libical package.
-
-
 %package lib
 Summary: lib components for the libical package.
 Group: Libraries
-Requires: libical-license
+Requires: libical-data = %{version}-%{release}
+Requires: libical-license = %{version}-%{release}
 
 %description lib
 lib components for the libical package.
@@ -76,11 +83,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1534427326
-mkdir clr-build
+export SOURCE_DATE_EPOCH=1541789509
+mkdir -p clr-build
 pushd clr-build
 %cmake ..
-make  %{?_smp_mflags}
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %check
@@ -88,23 +95,32 @@ export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-pushd clr-build ; make test ||: ; popd
+cd clr-build; make test || :
 
 %install
-export SOURCE_DATE_EPOCH=1534427326
+export SOURCE_DATE_EPOCH=1541789509
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/libical
-cp COPYING %{buildroot}/usr/share/doc/libical/COPYING
-cp LICENSE %{buildroot}/usr/share/doc/libical/LICENSE
-cp LICENSE.LGPL21.txt %{buildroot}/usr/share/doc/libical/LICENSE.LGPL21.txt
-cp LICENSE.MPL2.txt %{buildroot}/usr/share/doc/libical/LICENSE.MPL2.txt
-cp debian/copyright %{buildroot}/usr/share/doc/libical/debian_copyright
+mkdir -p %{buildroot}/usr/share/package-licenses/libical
+cp COPYING %{buildroot}/usr/share/package-licenses/libical/COPYING
+cp LICENSE %{buildroot}/usr/share/package-licenses/libical/LICENSE
+cp LICENSE.LGPL21.txt %{buildroot}/usr/share/package-licenses/libical/LICENSE.LGPL21.txt
+cp LICENSE.MPL2.txt %{buildroot}/usr/share/package-licenses/libical/LICENSE.MPL2.txt
+cp debian/copyright %{buildroot}/usr/share/package-licenses/libical/debian_copyright
 pushd clr-build
 %make_install
 popd
 
 %files
 %defattr(-,root,root,-)
+
+%files data
+%defattr(-,root,root,-)
+/usr/share/abi/libical-glib.so.3.0.4.abi
+/usr/share/abi/libical.so.3.0.4.abi
+/usr/share/abi/libical_cxx.so.3.0.4.abi
+/usr/share/abi/libicalss.so.3.0.4.abi
+/usr/share/abi/libicalss_cxx.so.3.0.4.abi
+/usr/share/abi/libicalvcal.so.3.0.4.abi
 
 %files dev
 %defattr(-,root,root,-)
@@ -210,10 +226,6 @@ popd
 /usr/lib64/pkgconfig/libical-glib.pc
 /usr/lib64/pkgconfig/libical.pc
 
-%files doc
-%defattr(0644,root,root,0755)
-%doc /usr/share/doc/libical/*
-
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libical-glib.so.3
@@ -230,8 +242,9 @@ popd
 /usr/lib64/libicalvcal.so.3.0.4
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/libical/COPYING
-/usr/share/doc/libical/LICENSE
-/usr/share/doc/libical/LICENSE.LGPL21.txt
-/usr/share/doc/libical/LICENSE.MPL2.txt
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/libical/COPYING
+/usr/share/package-licenses/libical/LICENSE
+/usr/share/package-licenses/libical/LICENSE.LGPL21.txt
+/usr/share/package-licenses/libical/LICENSE.MPL2.txt
+/usr/share/package-licenses/libical/debian_copyright
