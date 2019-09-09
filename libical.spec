@@ -4,12 +4,13 @@
 #
 Name     : libical
 Version  : 3.0.5
-Release  : 15
+Release  : 17
 URL      : https://github.com/libical/libical/archive/v3.0.5.tar.gz
 Source0  : https://github.com/libical/libical/archive/v3.0.5.tar.gz
-Summary  : An implementation of basic iCAL protocols
+Summary  : An open source reference implementation of the icalendar data type and serialization format
 Group    : Development/Tools
 License  : BSD-3-Clause LGPL-2.1 MPL-2.0 MPL-2.0-no-copyleft-exception
+Requires: libical-data = %{version}-%{release}
 Requires: libical-lib = %{version}-%{release}
 Requires: libical-license = %{version}-%{release}
 BuildRequires : buildreq-cmake
@@ -40,11 +41,21 @@ can be accessed from PHP. Would be a valuable building
 block in the practical adoption of the iCalendar
 standard (imho).
 
+%package data
+Summary: data components for the libical package.
+Group: Data
+
+%description data
+data components for the libical package.
+
+
 %package dev
 Summary: dev components for the libical package.
 Group: Development
 Requires: libical-lib = %{version}-%{release}
+Requires: libical-data = %{version}-%{release}
 Provides: libical-devel = %{version}-%{release}
+Requires: libical = %{version}-%{release}
 Requires: libical = %{version}-%{release}
 
 %description dev
@@ -62,6 +73,7 @@ doc components for the libical package.
 %package lib
 Summary: lib components for the libical package.
 Group: Libraries
+Requires: libical-data = %{version}-%{release}
 Requires: libical-license = %{version}-%{release}
 
 %description lib
@@ -83,10 +95,11 @@ license components for the libical package.
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1560461695
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1568040743
 mkdir -p clr-build
 pushd clr-build
+# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -95,19 +108,19 @@ export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
-%cmake ..
+%cmake .. -DGOBJECT_INTROSPECTION=true -DICAL_GLIB_VAPI=true
 make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 cd clr-build; make test || :
 
 %install
-export SOURCE_DATE_EPOCH=1560461695
+export SOURCE_DATE_EPOCH=1568040743
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libical
 cp COPYING %{buildroot}/usr/share/package-licenses/libical/COPYING
@@ -121,6 +134,13 @@ popd
 
 %files
 %defattr(-,root,root,-)
+
+%files data
+%defattr(-,root,root,-)
+/usr/lib64/girepository-1.0/ICal-3.0.typelib
+/usr/lib64/girepository-1.0/ICalGLib-3.0.typelib
+/usr/share/gir-1.0/*.gir
+/usr/share/vala/vapi/libical-glib.vapi
 
 %files dev
 %defattr(-,root,root,-)
