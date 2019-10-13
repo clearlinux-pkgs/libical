@@ -2054,6 +2054,7 @@ libical.so.3:icaltimezone_release_zone_tab
 libical.so.3:icaltimezone_set_builtin_tzdata
 libical.so.3:icaltimezone_set_component
 libical.so.3:icaltimezone_set_tzid_prefix
+libical.so.3:icaltimezone_truncate_vtimezone
 libical.so.3:icaltriggertype_from_int
 libical.so.3:icaltriggertype_from_string
 libical.so.3:icaltriggertype_is_bad_trigger
