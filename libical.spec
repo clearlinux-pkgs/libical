@@ -4,10 +4,10 @@
 #
 Name     : libical
 Version  : 3.0.6
-Release  : 18
+Release  : 19
 URL      : https://github.com/libical/libical/archive/v3.0.6/libical-3.0.6.tar.gz
 Source0  : https://github.com/libical/libical/archive/v3.0.6/libical-3.0.6.tar.gz
-Summary  : An open source reference implementation of the icalendar data type and serialization format
+Summary  : An implementation of basic iCAL protocols
 Group    : Development/Tools
 License  : BSD-3-Clause LGPL-2.1 MPL-2.0 MPL-2.0-no-copyleft-exception
 Requires: libical-data = %{version}-%{release}
@@ -31,6 +31,8 @@ BuildRequires : pkgconfig(gtk-doc)
 BuildRequires : pkgconfig(icu-i18n)
 BuildRequires : pkgconfig(libxml-2.0)
 BuildRequires : tzdata
+BuildRequires : util-linux
+Patch1: 0001-icaltimezone.c-Fix-race-condition-on-zone-changes-ar.patch
 
 %description
 Arnout Engelen pointed out, that you could create a php libical wrapper:
@@ -55,7 +57,6 @@ Group: Development
 Requires: libical-lib = %{version}-%{release}
 Requires: libical-data = %{version}-%{release}
 Provides: libical-devel = %{version}-%{release}
-Requires: libical = %{version}-%{release}
 Requires: libical = %{version}-%{release}
 
 %description dev
@@ -90,16 +91,17 @@ license components for the libical package.
 
 %prep
 %setup -q -n libical-3.0.6
+cd %{_builddir}/libical-3.0.6
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1571002636
+export SOURCE_DATE_EPOCH=1572551810
 mkdir -p clr-build
 pushd clr-build
-# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -120,7 +122,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 cd clr-build; make test || :
 
 %install
-export SOURCE_DATE_EPOCH=1571002636
+export SOURCE_DATE_EPOCH=1572551810
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libical
 cp %{_builddir}/libical-3.0.6/COPYING %{buildroot}/usr/share/package-licenses/libical/3bf3cf94d36c740565ea0b38105f1dc5ee25c695

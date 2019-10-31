@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Adam Dingle <adam@medovina.org>
+Date: Sat, 26 Oct 2019 21:46:57 +0200
+Subject: [PATCH] icaltimezone.c: Fix race condition on zone changes array
+
+commit https://github.com/libical/libical/commit/e108ef0fb3908c11e7c5933898be86b2b64b5aad
+
+I found a race condition in icaltimezone_get_utc_offset_of_utc_time(): it needs
+to acquire the icaltimezone_changes_lock() before calling
+icaltimezone_ensure_coverage(), just like icaltimezone_get_utc_offset() does.
+This is a simple one-line fix.
+
+I discovered this because of a visible problem in the GNOME Calendar
+application: times displayed in the calendar were often off by 1 hour around a
+daylight savings time transition. (There is some discussion of that problem
+here https://gitlab.gnome.org/GNOME/gnome-calendar/issues/444
+.) After a lot of debugging, I realized that the array of icaltimezonechange
+structures in the icaltimezone object representing my local time zone was
+getting corrupted unpredictably, leading to the bogus times. Ultimately this
+race condition was the cause.
+
+---
+ src/libical/icaltimezone.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libical/icaltimezone.c b/src/libical/icaltimezone.c
+index 3e8ed883..0f68d475 100644
+--- a/src/libical/icaltimezone.c
++++ b/src/libical/icaltimezone.c
+@@ -982,11 +982,11 @@ int icaltimezone_get_utc_offset_of_utc_time(icaltimezone *zone,
+     if (zone->builtin_timezone)
+         zone = zone->builtin_timezone;
+ 
++    icaltimezone_changes_lock();
++
+     /* Make sure the changes array is expanded up to the given time. */
+     icaltimezone_ensure_coverage(zone, tt->year);
+ 
+-    icaltimezone_changes_lock();
+-
+     if (!zone->changes || zone->changes->num_elements == 0) {
+         icaltimezone_changes_unlock();
+         return 0;
+-- 
+https://clearlinux.org
