@@ -4,7 +4,7 @@
 #
 Name     : libical
 Version  : 3.0.8
-Release  : 21
+Release  : 22
 URL      : https://github.com/libical/libical/archive/v3.0.8/libical-3.0.8.tar.gz
 Source0  : https://github.com/libical/libical/archive/v3.0.8/libical-3.0.8.tar.gz
 Summary  : An open source reference implementation of the icalendar data type and serialization format
