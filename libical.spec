@@ -5,7 +5,7 @@
 #
 Name     : libical
 Version  : 3.0.16
-Release  : 32
+Release  : 33
 URL      : https://github.com/libical/libical/archive/v3.0.16/libical-3.0.16.tar.gz
 Source0  : https://github.com/libical/libical/archive/v3.0.16/libical-3.0.16.tar.gz
 Summary  : An implementation of basic iCAL protocols
@@ -110,7 +110,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1683655033
+export SOURCE_DATE_EPOCH=1685638895
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -152,7 +152,7 @@ cd ../clr-build-avx2;
 make test || : || :
 
 %install
-export SOURCE_DATE_EPOCH=1683655033
+export SOURCE_DATE_EPOCH=1685638895
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libical
 cp %{_builddir}/libical-%{version}/COPYING %{buildroot}/usr/share/package-licenses/libical/3bf3cf94d36c740565ea0b38105f1dc5ee25c695 || :
@@ -180,12 +180,6 @@ popd
 
 %files dev
 %defattr(-,root,root,-)
-/V3/usr/lib64/libical-glib.so
-/V3/usr/lib64/libical.so
-/V3/usr/lib64/libical_cxx.so
-/V3/usr/lib64/libicalss.so
-/V3/usr/lib64/libicalss_cxx.so
-/V3/usr/lib64/libicalvcal.so
 /usr/include/libical-glib/i-cal-array.h
 /usr/include/libical-glib/i-cal-attach.h
 /usr/include/libical-glib/i-cal-comp-iter.h
@@ -338,17 +332,11 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/V3/usr/lib64/libical-glib.so.3
 /V3/usr/lib64/libical-glib.so.3.0.16
-/V3/usr/lib64/libical.so.3
 /V3/usr/lib64/libical.so.3.0.16
-/V3/usr/lib64/libical_cxx.so.3
 /V3/usr/lib64/libical_cxx.so.3.0.16
-/V3/usr/lib64/libicalss.so.3
 /V3/usr/lib64/libicalss.so.3.0.16
-/V3/usr/lib64/libicalss_cxx.so.3
 /V3/usr/lib64/libicalss_cxx.so.3.0.16
-/V3/usr/lib64/libicalvcal.so.3
 /V3/usr/lib64/libicalvcal.so.3.0.16
 /usr/lib64/libical-glib.so.3
 /usr/lib64/libical-glib.so.3.0.16
