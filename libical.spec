@@ -7,7 +7,7 @@
 #
 Name     : libical
 Version  : 3.0.20
-Release  : 39
+Release  : 40
 URL      : https://github.com/libical/libical/archive/v3.0.20/libical-3.0.20.tar.gz
 Source0  : https://github.com/libical/libical/archive/v3.0.20/libical-3.0.20.tar.gz
 Summary  : An implementation of basic iCAL protocols
